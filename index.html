@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seattle Traffic Project</title>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+        #controls {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            max-width: 300px;
+        }
+
+        h1 {
+            font-size: 18px;
+            margin: 0 0 10px 0;
+        }
+
+        h2 {
+            font-size: 14px;
+            margin: 0 0 10px 0;
+        }
+
+        .session {
+            margin-bottom: 20px;
+        }
+
+        .label {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .slider-label {
+            font-size: 14px;
+            color: #666;
+        }
+
+        #yearSlider {
+            width: 100%;
+        }
+
+        .legend {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="map"></div>
+    <div id="controls">
+        <h1>Seattle & NYC Traffic Map</h1>
+        <div class="session">
+            <h2>Year: <span id="active-year" class="label">2020</span></h2>
+            <input id="yearSlider" type="range" min="2020" max="2025" step="1" value="2020">
+        </div>
+        <div class="session">
+            <h2>Intensity Legend</h2>
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #00ff00;"></div>
+                    <span class="slider-label">Low</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #ffff00;"></div>
+                    <span class="slider-label">Moderate</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #ffbf00;"></div>
+                    <span class="slider-label">High</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #ff8000;"></div>
+                    <span class="slider-label">Very High</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #ff0000;"></div>
+                    <span class="slider-label">Extreme</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoiZWR3YXJkcDciLCJhIjoiY2xzZjZhZnYwMGdrbDJpcXB6MzZsN2lzbSJ9.o11htKQkTmOqa1HNdhtenQ';
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/light-v11',
+            center: [-122.3321, 47.6062], // Seattle coordinates
+            zoom: 10
+        });
+
+        map.on('load', async () => {
+            const geojsonFiles = {
+                2020: 'assets/Seattle_Traffic_Flow_2020_optimized.geojson',
+                2021: 'assets/Seattle_Traffic_Flow_2021_optimized.geojson',
+                2022: 'assets/Seattle_Traffic_Flow_2022_optimized.geojson',
+                2023: 'assets/Seattle_Traffic_Flow_2023_optimized.geojson',
+                2024: 'assets/Seattle_Traffic_Flow_2024_optimized.geojson',
+                2025: 'assets/Seattle_Traffic_Flow_2025.geojson'
+            };
+
+            const loadGeoJSON = async (year) => {
+                const response = await fetch(geojsonFiles[year]);
+                return await response.json();
+            };
+
+            const addTrafficLayers = (data) => {
+                if (map.getSource('traffic-flow')) {
+                    map.removeLayer('traffic-heat');
+                    map.removeLayer('traffic-point');
+                    map.removeSource('traffic-flow');
+                }
+                map.addSource('traffic-flow', {
+                    type: 'geojson',
+                    data: data
+                });
+
+                // Add heatmap layer
+                map.addLayer({
+                    id: 'traffic-heat',
+                    type: 'heatmap',
+                    source: 'traffic-flow',
+                    maxzoom: 15,
+                    paint: {
+                        'heatmap-weight': {
+                            property: 'traffic',
+                            type: 'exponential',
+                            stops: [
+                                [1, 0],
+                                [100, 1]
+                            ]
+                        },
+                        'heatmap-intensity': {
+                            stops: [
+                                [11, 1],
+                                [15, 3]
+                            ]
+                        },
+                        'heatmap-color': [
+                            'interpolate',
+                            ['linear'],
+                            ['heatmap-density'],
+                            0,
+                            'rgba(0,255,0,0)',       // Low
+                            0.2,
+                            'rgb(0,255,0)',          // Low
+                            0.4,
+                            'rgb(255,255,0)',        // Moderate
+                            0.6,
+                            'rgb(255,191,0)',        // High
+                            0.8,
+                            'rgb(255,128,0)',        // Very High
+                            1,
+                            'rgb(255,0,0)'           // Extreme
+                        ],
+                        'heatmap-radius': {
+                            stops: [
+                                [11, 15],
+                                [15, 20]
+                            ]
+                        },
+                        'heatmap-opacity': {
+                            default: 1,
+                            stops: [
+                                [14, 1],
+                                [15, 0]
+                            ]
+                        }
+                    }
+                });
+            };
+
+            const updateMap = async (year) => {
+                const data = await loadGeoJSON(year);
+                if (map.getSource('traffic-flow')) {
+                    map.getSource('traffic-flow').setData(data);
+                } else {
+                    addTrafficLayers(data);
+                }
+            };
+
+            document.getElementById('yearSlider').addEventListener('input', (event) => {
+                const year = event.target.value;
+                document.getElementById('active-year').textContent = year;
+                updateMap(year);
+            });
+
+            const initialData = await loadGeoJSON(2020);
+            addTrafficLayers(initialData);
+        });
+    </script>
+
+</body>
+
+</html>
