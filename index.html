@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en-US">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,14 +13,12 @@
             height: 100%;
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
         }
-
         #map {
             position: absolute;
             top: 0;
             bottom: 0;
             width: 100%;
         }
-
         #controls {
             position: absolute;
             top: 30px;
@@ -32,59 +29,61 @@
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
             max-width: 300px;
         }
-
         h1 {
             font-size: 18px;
             margin: 0 0 10px 0;
+            color: #333;
         }
-
         h2 {
             font-size: 14px;
             margin: 0 0 10px 0;
+            color: #555;
         }
-
         .session {
             margin-bottom: 20px;
         }
-
         .label {
             font-size: 14px;
             color: #333;
         }
-
         .slider-label {
             font-size: 14px;
             color: #666;
         }
-
         #yearSlider {
             width: 100%;
         }
-
         .legend {
             display: flex;
             flex-direction: column;
             gap: 5px;
         }
-
         .legend-item {
             display: flex;
             align-items: center;
         }
-
         .legend-color {
             width: 20px;
             height: 20px;
+            margin-right: 10px;
+        }
+        .collision-legend {
+            margin-top: 20px;
+        }
+        .collision-circle {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #0000FF;
             margin-right: 10px;
         }
     </style>
 </head>
 
 <body>
-
     <div id="map"></div>
     <div id="controls">
-        <h1>Seattle & NYC Traffic Map</h1>
+        <h1>Seattle Traffic Flow</h1>
         <div class="session">
             <h2>Year: <span id="active-year" class="label">2020</span></h2>
             <input id="yearSlider" type="range" min="2020" max="2025" step="1" value="2020">
@@ -113,9 +112,14 @@
                     <span class="slider-label">Extreme</span>
                 </div>
             </div>
+            <div class="legend collision-legend">
+                <div class="legend-item">
+                    <div class="collision-circle"></div>
+                    <span class="slider-label">Collision</span>
+                </div>
+            </div>
         </div>
     </div>
-
     <script>
         mapboxgl.accessToken = 'pk.eyJ1IjoiZWR3YXJkcDciLCJhIjoiY2xzZjZhZnYwMGdrbDJpcXB6MzZsN2lzbSJ9.o11htKQkTmOqa1HNdhtenQ';
         const map = new mapboxgl.Map({
@@ -126,7 +130,7 @@
         });
 
         map.on('load', async () => {
-            const geojsonFiles = {
+            const trafficGeojsonFiles = {
                 2020: 'assets/Seattle_Traffic_Flow_2020_optimized.geojson',
                 2021: 'assets/Seattle_Traffic_Flow_2021_optimized.geojson',
                 2022: 'assets/Seattle_Traffic_Flow_2022_optimized.geojson',
@@ -135,15 +139,23 @@
                 2025: 'assets/Seattle_Traffic_Flow_2025.geojson'
             };
 
-            const loadGeoJSON = async (year) => {
-                const response = await fetch(geojsonFiles[year]);
+            const collisionGeojsonFiles = {
+                2020: 'assets/Seattle_Collisions_2020_optimized.geojson',
+                2021: 'assets/Seattle_Collisions_2021_optimized.geojson',
+                2022: 'assets/Seattle_Collisions_2022_optimized.geojson',
+                2023: 'assets/Seattle_Collisions_2023_optimized.geojson',
+                2024: 'assets/Seattle_Collisions_2024_optimized.geojson',
+                2025: 'assets/Seattle_Collisions_2025_optimized.geojson'
+            };
+
+            const loadGeoJSON = async (files, year) => {
+                const response = await fetch(files[year]);
                 return await response.json();
             };
 
             const addTrafficLayers = (data) => {
                 if (map.getSource('traffic-flow')) {
                     map.removeLayer('traffic-heat');
-                    map.removeLayer('traffic-point');
                     map.removeSource('traffic-flow');
                 }
                 map.addSource('traffic-flow', {
@@ -151,7 +163,6 @@
                     data: data
                 });
 
-                // Add heatmap layer
                 map.addLayer({
                     id: 'traffic-heat',
                     type: 'heatmap',
@@ -206,12 +217,86 @@
                 });
             };
 
+            const addCollisionLayers = (data) => {
+                if (map.getSource('collision-points')) {
+                    map.removeLayer('collision-unclustered-point');
+                    map.removeLayer('collision-clusters');
+                    map.removeLayer('collision-cluster-count');
+                    map.removeSource('collision-points');
+                }
+                map.addSource('collision-points', {
+                    type: 'geojson',
+                    data: data,
+                    cluster: true,
+                    clusterMaxZoom: 14, // Max zoom level to cluster points on
+                    clusterRadius: 50   // Radius of each cluster when clustering points (defaults to 50)
+                });
+
+                map.addLayer({
+                    id: 'collision-clusters',
+                    type: 'circle',
+                    source: 'collision-points',
+                    filter: ['has', 'point_count'],
+                    paint: {
+                        'circle-color': [
+                            'step',
+                            ['get', 'point_count'],
+                            '#51bbd6',
+                            10,
+                            '#f1f075',
+                            30,
+                            '#f28cb1'
+                        ],
+                        'circle-radius': [
+                            'step',
+                            ['get', 'point_count'],
+                            15,
+                            10,
+                            20,
+                            30,
+                            25
+                        ]
+                    }
+                });
+
+                map.addLayer({
+                    id: 'collision-cluster-count',
+                    type: 'symbol',
+                    source: 'collision-points',
+                    filter: ['has', 'point_count'],
+                    layout: {
+                        'text-field': '{point_count_abbreviated}',
+                        'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                        'text-size': 12
+                    }
+                });
+
+                map.addLayer({
+                    id: 'collision-unclustered-point',
+                    type: 'circle',
+                    source: 'collision-points',
+                    filter: ['!', ['has', 'point_count']],
+                    paint: {
+                        'circle-color': '#0000FF',
+                        'circle-radius': 5,
+                        'circle-stroke-width': 1,
+                        'circle-stroke-color': '#FFFFFF'
+                    }
+                });
+            };
+
             const updateMap = async (year) => {
-                const data = await loadGeoJSON(year);
+                const trafficData = await loadGeoJSON(trafficGeojsonFiles, year);
+                const collisionData = await loadGeoJSON(collisionGeojsonFiles, year);
                 if (map.getSource('traffic-flow')) {
-                    map.getSource('traffic-flow').setData(data);
+                    map.getSource('traffic-flow').setData(trafficData);
                 } else {
-                    addTrafficLayers(data);
+                    addTrafficLayers(trafficData);
+                }
+                if (map.getSource('collision-points')) {
+                    map.getSource('collision-points').setData(collisionData);
+                } else {
+                    addCollisionLayers(collisionData);
                 }
             };
 
@@ -221,11 +306,11 @@
                 updateMap(year);
             });
 
-            const initialData = await loadGeoJSON(2020);
-            addTrafficLayers(initialData);
+            const initialTrafficData = await loadGeoJSON(trafficGeojsonFiles, 2020);
+            const initialCollisionData = await loadGeoJSON(collisionGeojsonFiles, 2020);
+            addTrafficLayers(initialTrafficData);
+            addCollisionLayers(initialCollisionData);
         });
     </script>
-
 </body>
-
 </html>
