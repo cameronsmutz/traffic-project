@@ -46,8 +46,8 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiZWR3YXJkcDciLCJhIjoiY2xzZjZhZnYwMGdrbDJpcXB6M
                     'circle-color': [
                         'step',
                         ['get', 'point_count'],
-                        '#51bbd6', 10,
-                        '#f1f075', 30,
+                        '#51bbd6', 100,
+                        '#f1f075', 1000,
                         '#f28cb1'
                     ],
                     'circle-radius': [
