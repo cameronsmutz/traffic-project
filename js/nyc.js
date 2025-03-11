@@ -1,4 +1,26 @@
 mapboxgl.accessToken = 'pk.eyJ1IjoiZWR3YXJkcDciLCJhIjoiY2xzZjZhZnYwMGdrbDJpcXB6MzZsN2lzbSJ9.o11htKQkTmOqa1HNdhtenQ';
+        // FOR NAVIGATION
+        // Get the element with the class "icon"
+        let icon = document.getElementsByClassName("icon")[0];
+
+        // Add an event listener for the 'click' event on the icon element
+        icon.addEventListener('click', responsive_control);
+
+        // Function to control the responsiveness of the navigation bar
+        function responsive_control() {
+            // Get the element with the id "myTopnav"
+            let x = document.getElementById("myTopnav");
+
+            // Check if the class name of the element is "topnav"
+            if (x.className === "topnav") {
+            // If it is, add the "responsive" class to the element
+            x.className += " responsive";
+          } else {
+            // If it's not, remove the "responsive" class from the element
+            x.className = "topnav";
+          }
+        }
+        // END OF NAVIGATION
         const map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/light-v11',
@@ -7,12 +29,12 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiZWR3YXJkcDciLCJhIjoiY2xzZjZhZnYwMGdrbDJpcXB6M
         });
 
         const collisionGeojsonFiles = {
-            2020: 'nyc_crashes_2020.geojson',
-            2021: 'nyc_crashes_2021.geojson',
-            2022: 'nyc_crashes_2022.geojson',
-            2023: 'nyc_crashes_2023.geojson',
-            2024: 'nyc_crashes_2024.geojson',
-            2025: 'nyc_crashes_2025.geojson'
+            2020: 'assets/nyc_crashes_2020.geojson',
+            2021: 'assets/nyc_crashes_2021.geojson',
+            2022: 'assets/nyc_crashes_2022.geojson',
+            2023: 'assets/nyc_crashes_2023.geojson',
+            2024: 'assets/nyc_crashes_2024.geojson',
+            2025: 'assets/nyc_crashes_2025.geojson'
         };
 
         const loadGeoJSON = async (file) => {
