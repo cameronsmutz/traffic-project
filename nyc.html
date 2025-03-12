@@ -116,6 +116,7 @@
             height: 12px;
             margin-right: 5px;
             border-radius: 50%;
+            border: 1px solid black; /* Add black border */
         }
         .blue-dot {
             background: #0000FF;
@@ -137,7 +138,7 @@
     <!-- END OF NAVIGATION -->
     <div id="map"></div>
     <div id="controls">
-        <h1>New York City Collision Map</h1>
+        <h1>New York City Traffic Map</h1>
         <label for="yearSlider">Year: <span id="active-year">2020</span></label>
         <input id="yearSlider" type="range" min="2020" max="2023" step="1" value="2020">
         <div>
@@ -145,7 +146,12 @@
             <label for="toggleCrashLayer">Show Collision Heatmap</label>
         </div>
         <div id="legend">
-            <p><span class="legend-key blue-dot"></span> Collision</p>
+            <h3>Average Annual Daily Traffic</h3>
+            <p><span class="legend-key" style="background: rgb(8,81,156);"></span>5000</p>
+            <p><span class="legend-key" style="background: rgb(49,130,189);"></span>10000</p>
+            <p><span class="legend-key" style="background: rgb(107,174,214);"></span>20000</p>
+            <p><span class="legend-key" style="background: rgb(189,215,231);"></span>50000</p>
+            <p><span class="legend-key" style="background: rgb(239,243,255);"></span>100000+</p>
         </div>
     </div>
     <script src="js/nyc.js"></script>
