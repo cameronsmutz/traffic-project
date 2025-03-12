@@ -126,210 +126,211 @@
             <p><span class="legend-key" style="background: rgb(239,243,255);"></span>100000+</p>
         </div>
     </div>
-    <script>
-    mapboxgl.accessToken = 'pk.eyJ1IjoiZWR3YXJkcDciLCJhIjoiY2xzZjZhZnYwMGdrbDJpcXB6MzZsN2lzbSJ9.o11htKQkTmOqa1HNdhtenQ';
+    <script src="js/nyc.js">
+    // mapboxgl.accessToken = 'pk.eyJ1IjoiZWR3YXJkcDciLCJhIjoiY2xzZjZhZnYwMGdrbDJpcXB6MzZsN2lzbSJ9.o11htKQkTmOqa1HNdhtenQ';
 
-    let icon = document.getElementsByClassName("icon")[0];
-    icon.addEventListener('click', responsive_control);
+    // let icon = document.getElementsByClassName("icon")[0];
+    // icon.addEventListener('click', responsive_control);
 
-    function responsive_control() {
-        let x = document.getElementById("myTopnav");
-        if (x.className === "topnav") {
-            x.className += " responsive";
-        } else {
-            x.className = "topnav";
-        }
-    }
+    // function responsive_control() {
+    //     let x = document.getElementById("myTopnav");
+    //     if (x.className === "topnav") {
+    //         x.className += " responsive";
+    //     } else {
+    //         x.className = "topnav";
+    //     }
+    // }
 
-    const map = new mapboxgl.Map({
-        container: 'map',
-        style: 'mapbox://styles/mapbox/dark-v11',
-        center: [-74.006, 40.7128],
-        zoom: 10
-    });
+    // const map = new mapboxgl.Map({
+    //     container: 'map',
+    //     style: 'mapbox://styles/mapbox/dark-v11',
+    //     center: [-74.006, 40.7128],
+    //     zoom: 10
+    // });
 
-    const collisionGeojsonFiles = {
-        2020: 'assets/nyc_crashes_2020_minimized.geojson',
-        2021: 'assets/nyc_crashes_2021_minimized.geojson',
-        2022: 'assets/nyc_crashes_2022_minimized.geojson',
-        2023: 'assets/nyc_crashes_2023_minimized.geojson'
-    };
+    // const collisionGeojsonFiles = {
+    //     2020: 'assets/nyc_crashes_2020_minimized.geojson',
+    //     2021: 'assets/nyc_crashes_2021_minimized.geojson',
+    //     2022: 'assets/nyc_crashes_2022_minimized.geojson',
+    //     2023: 'assets/nyc_crashes_2023_minimized.geojson'
+    // };
 
-    const trafficGeojsonFiles = {
-        2020: 'assets/NYC_Traffic_minimized.geojson',
-        2021: 'assets/NYC_Traffic_minimized.geojson',
-        2022: 'assets/NYC_Traffic_minimized.geojson',
-        2023: 'assets/NYC_Traffic_minimized.geojson'
-    };
+    // const trafficGeojsonFiles = {
+    //     2020: 'assets/NYC_Traffic_minimized.geojson',
+    //     2021: 'assets/NYC_Traffic_minimized.geojson',
+    //     2022: 'assets/NYC_Traffic_minimized.geojson',
+    //     2023: 'assets/NYC_Traffic_minimized.geojson'
+    // };
 
-    const loadGeoJSON = async (file) => {
-        const response = await fetch(file + "?t=" + new Date().getTime());
-        return await response.json();
-    };
+    // const loadGeoJSON = async (file) => {
+    //     const response = await fetch(file + "?t=" + new Date().getTime());
+    //     return await response.json();
+    // };
 
-    const updateTrafficLayer = async (year) => {
-        const trafficData = await loadGeoJSON(trafficGeojsonFiles[year]);
+    // const updateTrafficLayer = async (year) => {
+    //     const trafficData = await loadGeoJSON(trafficGeojsonFiles[year]);
 
-        if (map.getLayer('traffic-symbols')) map.removeLayer('traffic-symbols');
-        if (map.getLayer('traffic-point')) map.removeLayer('traffic-point');
-        if (map.getSource('traffic-points')) map.removeSource('traffic-points');
+    //     if (map.getLayer('traffic-symbols')) map.removeLayer('traffic-symbols');
+    //     if (map.getLayer('traffic-point')) map.removeLayer('traffic-point');
+    //     if (map.getSource('traffic-points')) map.removeSource('traffic-points');
 
-        map.addSource('traffic-points', {
-            type: 'geojson',
-            data: trafficData
-        });
+    //     map.addSource('traffic-points', {
+    //         type: 'geojson',
+    //         data: trafficData
+    //     });
 
-        map.addLayer({
-            id: 'traffic-symbols',
-            type: 'heatmap',
-            source: 'traffic-points',
-            maxzoom: 15,
-            paint: {
-                'heatmap-weight': [
-                    'interpolate',
-                    ['linear'],
-                    ['to-number', ['get', `AADT_${year}`]],
-                    1, 0,
-                    5000, 0.2, 
-                    10000, 0.4, 
-                    20000, 0.6,
-                    50000, 0.8,
-                    100000, 1
-                ],
-                'heatmap-intensity': [
-                    'interpolate',
-                    ['linear'],
-                    ['zoom'],
-                    11, 1,
-                    15, 3
-                ],
-                'heatmap-color': [
-                    'interpolate',
-                    ['linear'],
-                    ['heatmap-density'],
-                    0, 'rgba(8,81,156,0)',
-                    0.2, 'rgb(8,81,156)',
-                    0.4, 'rgb(49,130,189)',
-                    0.6, 'rgb(107,174,214)',
-                    0.8, 'rgb(189,215,231)',
-                    1, 'rgb(239,243,255)'
-                ],
-                'heatmap-radius': [
-                    'interpolate',
-                    ['linear'],
-                    ['zoom'],
-                    10, 11,
-                    18, 25
-                ],
-                'heatmap-opacity': {
-                    default: 1,
-                    stops: [
-                        [14, 1],
-                        [15, 0]
-                    ]
-                }
-            }
-        });
-    };
+    //     map.addLayer({
+    //         id: 'traffic-symbols',
+    //         type: 'heatmap',
+    //         source: 'traffic-points',
+    //         maxzoom: 15,
+    //         paint: {
+    //             'heatmap-weight': [
+    //                 'interpolate',
+    //                 ['linear'],
+    //                 ['to-number', ['get', `AADT_${year}`]],
+    //                 1, 0,
+    //                 5000, 0.2, 
+    //                 10000, 0.4, 
+    //                 20000, 0.6,
+    //                 50000, 0.8,
+    //                 100000, 1
+    //             ],
+    //             'heatmap-intensity': [
+    //                 'interpolate',
+    //                 ['linear'],
+    //                 ['zoom'],
+    //                 11, 1,
+    //                 15, 3
+    //             ],
+    //             'heatmap-color': [
+    //                 'interpolate',
+    //                 ['linear'],
+    //                 ['heatmap-density'],
+    //                 0, 'rgba(8,81,156,0)',
+    //                 0.2, 'rgb(8,81,156)',
+    //                 0.4, 'rgb(49,130,189)',
+    //                 0.6, 'rgb(107,174,214)',
+    //                 0.8, 'rgb(189,215,231)',
+    //                 1, 'rgb(239,243,255)'
+    //             ],
+    //             'heatmap-radius': [
+    //                 'interpolate',
+    //                 ['linear'],
+    //                 ['zoom'],
+    //                 10, 11,
+    //                 18, 25
+    //             ],
+    //             'heatmap-opacity': {
+    //                 default: 1,
+    //                 stops: [
+    //                     [14, 1],
+    //                     [15, 0]
+    //                 ]
+    //             }
+    //         }
+    //     });
+    // };
 
-    const updateMap = async (year) => {
-        const collisionData = await loadGeoJSON(collisionGeojsonFiles[year]);
+    // const updateMap = async (year) => {
+    //     const collisionData = await loadGeoJSON(collisionGeojsonFiles[year]);
 
-        if (map.getLayer('collision-cluster')) map.removeLayer('collision-cluster');
-        if (map.getLayer('collision-count')) map.removeLayer('collision-count');
-        if (map.getLayer('collision-points')) map.removeLayer('collision-points');
-        if (map.getSource('collision-points')) map.removeSource('collision-points');
+    //     if (map.getLayer('collision-cluster')) map.removeLayer('collision-cluster');
+    //     if (map.getLayer('collision-count')) map.removeLayer('collision-count');
+    //     if (map.getLayer('collision-points')) map.removeLayer('collision-points');
+    //     if (map.getSource('collision-points')) map.removeSource('collision-points');
 
-        map.addSource('collision-points', {
-            type: 'geojson',
-            data: collisionData,
-            cluster: true,
-            clusterMaxZoom: 14,
-            clusterRadius: 50
-        });
+    //     map.addSource('collision-points', {
+    //         type: 'geojson',
+    //         data: collisionData,
+    //         cluster: true,
+    //         clusterMaxZoom: 14,
+    //         clusterRadius: 50
+    //     });
 
-        map.addLayer({
-            id: 'collision-cluster',
-            type: 'circle',
-            source: 'collision-points',
-            filter: ['has', 'point_count'],
-            paint: {
-                'circle-color': [
-                    'step',
-                    ['get', 'point_count'],
-                    '#51bbd6', 100,
-                    '#f1f075', 1000,
-                    '#f28cb1'
-                ],
-                'circle-radius': [
-                    'step',
-                    ['get', 'point_count'],
-                    15, 10,
-                    20, 30,
-                    25
-                ],
-                'circle-opacity': 0.5
-            }
-        });
+    //     map.addLayer({
+    //         id: 'collision-cluster',
+    //         type: 'circle',
+    //         source: 'collision-points',
+    //         filter: ['has', 'point_count'],
+    //         paint: {
+    //             'circle-color': [
+    //                 'step',
+    //                 ['get', 'point_count'],
+    //                 '#51bbd6', 100,
+    //                 '#f1f075', 1000,
+    //                 '#f28cb1'
+    //             ],
+    //             'circle-radius': [
+    //                 'step',
+    //                 ['get', 'point_count'],
+    //                 15, 10,
+    //                 20, 30,
+    //                 25
+    //             ],
+    //             'circle-opacity': 0.5
+    //         }
+    //     });
 
-        map.addLayer({
-            id: 'collision-count',
-            type: 'symbol',
-            source: 'collision-points',
-            filter: ['has', 'point_count'],
-            layout: {
-                'text-field': '{point_count_abbreviated}',
-                'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                'text-size': 12
-            },
-            paint: {
-                'text-color': '#000'
-            }
-        });
+    //     map.addLayer({
+    //         id: 'collision-count',
+    //         type: 'symbol',
+    //         source: 'collision-points',
+    //         filter: ['has', 'point_count'],
+    //         layout: {
+    //             'text-field': '{point_count_abbreviated}',
+    //             'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+    //             'text-size': 12
+    //         },
+    //         paint: {
+    //             'text-color': '#000'
+    //         }
+    //     });
 
-        map.addLayer({
-            id: 'collision-points',
-            type: 'circle',
-            source: 'collision-points',
-            filter: ['!', ['has', 'point_count']],
-            paint: {
-                'circle-radius': 5,
-                'circle-color': '#0000FF'
-            }
-        });
+    //     map.addLayer({
+    //         id: 'collision-points',
+    //         type: 'circle',
+    //         source: 'collision-points',
+    //         filter: ['!', ['has', 'point_count']],
+    //         paint: {
+    //             'circle-radius': 5,
+    //             'circle-color': '#0000FF'
+    //         }
+    //     });
 
-        // Check the current state of the toggle and apply visibility
-        const isCrashLayerVisible = document.getElementById('toggleCrashLayer').checked;
-        const visibility = isCrashLayerVisible ? 'visible' : 'none';
-        map.setLayoutProperty('collision-cluster', 'visibility', visibility);
-        map.setLayoutProperty('collision-count', 'visibility', visibility);
-        map.setLayoutProperty('collision-points', 'visibility', visibility);
-    };
+    //     // Check the current state of the toggle and apply visibility
+    //     const isCrashLayerVisible = document.getElementById('toggleCrashLayer').checked;
+    //     const visibility = isCrashLayerVisible ? 'visible' : 'none';
+    //     map.setLayoutProperty('collision-cluster', 'visibility', visibility);
+    //     map.setLayoutProperty('collision-count', 'visibility', visibility);
+    //     map.setLayoutProperty('collision-points', 'visibility', visibility);
+    // };
 
-    document.getElementById('yearSlider').addEventListener('input', (event) => {
-        const year = event.target.value;
-        document.getElementById('active-year').textContent = year;
-        updateMap(year);
-        updateTrafficLayer(year);
+    // document.getElementById('yearSlider').addEventListener('input', (event) => {
+    //     const year = event.target.value;
+    //     document.getElementById('active-year').textContent = year;
+    //     updateMap(year);
+    //     updateTrafficLayer(year);
 
-        // Apply the crash layer visibility based on the checkbox after year change
-        const isCrashLayerVisible = document.getElementById('toggleCrashLayer').checked;
-        const visibility = isCrashLayerVisible ? 'visible' : 'none';
-        map.setLayoutProperty('collision-cluster', 'visibility', visibility);
-        map.setLayoutProperty('collision-count', 'visibility', visibility);
-        map.setLayoutProperty('collision-points', 'visibility', visibility);
-    });
+    //     // Apply the crash layer visibility based on the checkbox after year change
+    //     const isCrashLayerVisible = document.getElementById('toggleCrashLayer').checked;
+    //     const visibility = isCrashLayerVisible ? 'visible' : 'none';
+    //     map.setLayoutProperty('collision-cluster', 'visibility', visibility);
+    //     map.setLayoutProperty('collision-count', 'visibility', visibility);
+    //     map.setLayoutProperty('collision-points', 'visibility', visibility);
+    // });
 
-    document.getElementById('toggleCrashLayer').addEventListener('change', (event) => {
-        const visibility = event.target.checked ? 'visible' : 'none';
-        map.setLayoutProperty('collision-cluster', 'visibility', visibility);
-        map.setLayoutProperty('collision-count', 'visibility', visibility);
-        map.setLayoutProperty('collision-points', 'visibility', visibility);
-    });
+    // document.getElementById('toggleCrashLayer').addEventListener('change', (event) => {
+    //     const visibility = event.target.checked ? 'visible' : 'none';
+    //     map.setLayoutProperty('collision-cluster', 'visibility', visibility);
+    //     map.setLayoutProperty('collision-count', 'visibility', visibility);
+    //     map.setLayoutProperty('collision-points', 'visibility', visibility);
+    // });
 
-    // Initialize the map with 2020 data
-    updateMap(2020);
-    updateTrafficLayer(2020);
+    // // Initialize the map with 2020 data
+    // updateMap(2020);
+    // updateTrafficLayer(2020);
+    
 </script>
 </body>
 </html>
