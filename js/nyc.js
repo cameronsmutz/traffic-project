@@ -55,6 +55,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiZWR3YXJkcDciLCJhIjoiY2xzZjZhZnYwMGdrbDJpcXB6M
             const trafficData = await loadGeoJSON(trafficGeojsonFiles[year]);
 
             if (map.getLayer('traffic-symbols')) map.removeLayer('traffic-symbols');
+            if (map.getLayer('traffic-point')) map.removeLayer('traffic-point');
             if (map.getSource('traffic-points')) map.removeSource('traffic-points');
 
             map.addSource('traffic-points', {
