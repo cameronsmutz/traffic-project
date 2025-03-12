@@ -66,6 +66,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiZWR3YXJkcDciLCJhIjoiY2xzZjZhZnYwMGdrbDJpcXB6M
                 id: 'traffic-symbols',
                 type: 'heatmap',
                 source: 'traffic-points',
+                maxzoom: 15,
                 paint: {
                     'heatmap-weight': [
                         'interpolate',
@@ -107,8 +108,59 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiZWR3YXJkcDciLCJhIjoiY2xzZjZhZnYwMGdrbDJpcXB6M
                         10, 11,
                         18, 25
                     ],
+                     'heatmap-opacity': {
+                        default: 1,
+                        stops: [
+                        [14, 1],
+                        [15, 0]
+        ]
+      }
                 }
             });
+            map.addLayer(
+  {
+    id: 'traffic-point',
+    type: 'circle',
+    source: 'traffic-points',
+    minzoom: 14,
+    paint: {
+      'circle-radius': {
+        stops: [
+          [15, 7],
+          [22, 36]
+        ]
+      },
+      'circle-color': [
+        'interpolate',
+                        ['linear'],
+                        ['to-number', ['get', `AADT_${year}`]],
+                        1, 'rgba(8,81,156,0)',
+                        5000, 'rgb(8,81,156)',
+                        10000, 'rgb(49,130,189)',
+                        20000, 'rgb(107,174,214)',
+                        50000, 'rgb(189,215,231)',
+                        100000, 'rgb(239,243,255)'
+      ],
+      'circle-stroke-color': 'white',
+      'circle-stroke-width': 1,
+      'circle-opacity': {
+        stops: [
+          [14, 0],
+          [15, 1]
+        ]
+      }
+    }
+  },
+
+);
+
+map.on('click', 'traffic-point', (event) => {
+    const properties = event.features[0].properties;
+    new mapboxgl.Popup()
+        .setLngLat(event.features[0].geometry.coordinates)
+        .setHTML(`<strong>Road:</strong> ${properties.desc}<br><strong>Average Annual Daily Traffic:</strong> ${properties[`AADT_${year}`]}`)
+        .addTo(map);
+});
         };
 
         const updateMap = async (year) => {
