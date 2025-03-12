@@ -40,8 +40,6 @@ const map = new mapboxgl.Map({
       2021: 'assets/Seattle_Collisions_2021_optimized.geojson',
       2022: 'assets/Seattle_Collisions_2022_optimized.geojson',
       2023: 'assets/Seattle_Collisions_2023_optimized.geojson',
-      2024: 'assets/Seattle_Collisions_2024_optimized.geojson',
-      2025: 'assets/Seattle_Collisions_2025_optimized.geojson'
   };
 
 const loadGeoJSON = async (file) => {
