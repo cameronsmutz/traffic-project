@@ -164,6 +164,21 @@ map.on('click', 'traffic-point', (event) => {
         .setHTML(`<strong>Road:</strong> ${properties.desc}<br><strong>Average Annual Daily Traffic:</strong> ${properties[`AADT_${year}`]}`)
         .addTo(map);
 });
+
+// Update click event for collision points
+map.on('click', 'collision-heatmap', (event) => {
+    const properties = event.features[0].properties;
+    new mapboxgl.Popup()
+        .setLngLat(event.features[0].geometry.coordinates)
+        .setHTML(`
+            <strong>Location:</strong> ${properties.on_street_name}<br>
+            <strong>Number of collisions:</strong> ${properties.crash_count}<br>
+            <strong>Injuries:</strong> ${properties.number_of_persons_injured}<br>
+            <strong>Deaths:</strong> ${properties.number_of_persons_killed}
+        `)
+        .addTo(map);
+});
+
         };
 
         const updateMap = async (year) => {
