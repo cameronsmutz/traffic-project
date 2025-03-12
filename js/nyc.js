@@ -28,6 +28,13 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiZWR3YXJkcDciLCJhIjoiY2xzZjZhZnYwMGdrbDJpcXB6M
             zoom: 10
         });
 
+        const trafficGeojsonFiles = {
+            2020: 'assets/NYC_Traffic_minimized.geojson',
+            2021: 'assets/NYC_Traffic_minimized.geojson',
+            2022: 'assets/NYC_Traffic_minimized.geojson',
+            2023: 'assets/NYC_Traffic_minimized.geojson'
+        };
+
         const collisionGeojsonFiles = {
             2020: 'assets/nyc_crashes_2020_minimized.geojson',
             2021: 'assets/nyc_crashes_2021_minimized.geojson',
@@ -37,12 +44,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiZWR3YXJkcDciLCJhIjoiY2xzZjZhZnYwMGdrbDJpcXB6M
             // 2025: 'assets/nyc_crashes_2025_optimized.geojson'
         };
 
-        const trafficGeojsonFiles = {
-            2020: 'assets/NYC_Traffic_minimized.geojson',
-            2021: 'assets/NYC_Traffic_minimized.geojson',
-            2022: 'assets/NYC_Traffic_minimized.geojson',
-            2023: 'assets/NYC_Traffic_minimized.geojson'
-        };
+        
 
         const loadGeoJSON = async (file) => {
             const response = await fetch(file + "?t=" + new Date().getTime());

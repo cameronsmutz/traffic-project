@@ -20,48 +20,27 @@
         <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
         <a href="javascript:void(0);" class="icon">
             <i class="fa fa-bars"></i>
-          </a>
+        </a>
     </div>
     <!-- END OF NAVIGATION -->
     <div id="map"></div>
     <div id="controls">
-        <h1>Seattle Traffic Flow</h1>
-        <div class="session">
-            <h2>Year: <span id="active-year" class="label">2020</span></h2>
-            <input id="yearSlider" type="range" min="2020" max="2025" step="1" value="2020">
+        <h1>Seattle Traffic Map</h1>
+        <label for="yearSlider">Year: <span id="active-year">2020</span></label>
+        <input id="yearSlider" type="range" min="2020" max="2023" step="1" value="2020">
+        <div>
+            <input type="checkbox" id="toggleCrashLayer">
+            <label for="toggleCrashLayer">Show Collision Clusters</label>
         </div>
-        <div class="session">
-            <h2>Intensity Legend</h2>
-            <div class="legend">
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: #00ff00;"></div>
-                    <span class="slider-label">Low</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: #ffff00;"></div>
-                    <span class="slider-label">Moderate</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: #ffbf00;"></div>
-                    <span class="slider-label">High</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: #ff8000;"></div>
-                    <span class="slider-label">Very High</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background-color: #ff0000;"></div>
-                    <span class="slider-label">Extreme</span>
-                </div>
-            </div>
-            <div class="legend collision-legend">
-                <div class="legend-item">
-                    <div class="collision-circle"></div>
-                    <span class="slider-label">Collision</span>
-                </div>
-            </div>
+        <div id="legend">
+            <h3>Average Annual Daily Traffic</h3>
+            <p><span class="legend-key" style="background: rgb(8,81,156);"></span>5,000</p>
+            <p><span class="legend-key" style="background: rgb(49,130,189);"></span>10,000</p>
+            <p><span class="legend-key" style="background: rgb(107,174,214);"></span>20,000</p>
+            <p><span class="legend-key" style="background: rgb(189,215,231);"></span>50,000</p>
+            <p><span class="legend-key" style="background: rgb(239,243,255);"></span>100,000+</p>
         </div>
     </div>
-     <script src="js/seattle.js"></script>
+    <script src="js/seattle.js"></script>
 </body>
 </html>
