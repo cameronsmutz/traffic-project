@@ -23,7 +23,7 @@ function responsive_control() {
 // END OF NAVIGATION
 const map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/edwardp7/cm85ct1y0005901r00x0bggpr',
+    style: 'mapbox://styles/edwardp7/cm868lju6007p01ssecfoavmb',
     center: [-122.3321, 47.6062], // Seattle coordinates
     zoom: 10
 });
@@ -85,9 +85,9 @@ map.on('load', async () => {
                   ['linear'],
                   ['heatmap-density'],
                   0,
-                  'rgba(255, 255, 255, 0)',       // Low
+                  'rgba(0, 255, 0, 0)',       // Low
                   0.2,
-                  'rgb(255, 255, 255)',          // Low
+                  'rgb(0, 255, 0)',          // Low
                   0.4,
                   'rgb(255,255,0)',        // Moderate
                   0.6,
