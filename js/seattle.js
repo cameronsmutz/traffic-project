@@ -30,12 +30,10 @@ const map = new mapboxgl.Map({
 
 map.on('load', async () => {
   const trafficGeojsonFiles = {
-      2020: 'assets/Seattle_Traffic_Flow_2020_optimized.geojson',
-      2021: 'assets/Seattle_Traffic_Flow_2021_optimized.geojson',
-      2022: 'assets/Seattle_Traffic_Flow_2022_optimized.geojson',
-      2023: 'assets/Seattle_Traffic_Flow_2023_optimized.geojson',
-      2024: 'assets/Seattle_Traffic_Flow_2024_optimized.geojson',
-      2025: 'assets/Seattle_Traffic_Flow_2025.geojson'
+      2020: 'assets/seattle_traffic_2020.geojson',
+      2021: 'assets/seattle_traffic_2021.geojson',
+      2022: 'assets/seattle_traffic_2022.geojson',
+      2023: 'assets/seattle_traffic_2023.geojson',
   };
 
   const collisionGeojsonFiles = {
