@@ -23,7 +23,7 @@ function responsive_control() {
 // END OF NAVIGATION
 const map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/mapbox/light-v11',
+    style: 'mapbox://styles/edwardp7/cm85ct1y0005901r00x0bggpr',
     center: [-122.3321, 47.6062], // Seattle coordinates
     zoom: 10
 });
