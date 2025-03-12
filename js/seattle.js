@@ -153,7 +153,7 @@ map.on('load', async () => {
                 25,
                 20
             ],
-            'circle-opacity': 0.8
+            'circle-opacity': 0.85
         }
     });
 
