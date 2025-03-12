@@ -1,4 +1,4 @@
- mapboxgl.accessToken = 'pk.eyJ1IjoiZWR3YXJkcDciLCJhIjoiY2xzZjZhZnYwMGdrbDJpcXB6MzZsN2lzbSJ9.o11htKQkTmOqa1HNdhtenQ';
+mapboxgl.accessToken = 'pk.eyJ1IjoiZWR3YXJkcDciLCJhIjoiY2xzZjZhZnYwMGdrbDJpcXB6MzZsN2lzbSJ9.o11htKQkTmOqa1HNdhtenQ';
         // FOR NAVIGATION
         // Get the element with the class "icon"
         let icon = document.getElementsByClassName("icon")[0];
@@ -23,18 +23,25 @@
         // END OF NAVIGATION
         const map = new mapboxgl.Map({
             container: 'map',
-            style: 'mapbox://styles/edwardp7/cm85ct1y0005901r00x0bggpr',
+            style: 'mapbox://styles/mapbox/dark-v11',
             center: [-74.006, 40.7128],
             zoom: 10
         });
 
         const collisionGeojsonFiles = {
-            2020: 'assets/nyc_crashes_2020.geojson',
-            2021: 'assets/nyc_crashes_2021.geojson',
-            2022: 'assets/nyc_crashes_2022.geojson',
-            2023: 'assets/nyc_crashes_2023.geojson',
-            2024: 'assets/nyc_crashes_2024.geojson',
-            2025: 'assets/nyc_crashes_2025.geojson'
+            2020: 'assets/nyc_crashes_2020_minimized.geojson',
+            2021: 'assets/nyc_crashes_2021_minimized.geojson',
+            2022: 'assets/nyc_crashes_2022_minimized.geojson',
+            2023: 'assets/nyc_crashes_2023_minimized.geojson',
+            // 2024: 'assets/nyc_crashes_2024_optimized.geojson',
+            // 2025: 'assets/nyc_crashes_2025_optimized.geojson'
+        };
+
+        const trafficGeojsonFiles = {
+            2020: 'assets/NYC_Traffic_minimized.geojson',
+            2021: 'assets/NYC_Traffic_minimized.geojson',
+            2022: 'assets/NYC_Traffic_minimized.geojson',
+            2023: 'assets/NYC_Traffic_minimized.geojson'
         };
 
         const loadGeoJSON = async (file) => {
@@ -42,71 +49,129 @@
             return await response.json();
         };
 
+        
+
+        const updateTrafficLayer = async (year) => {
+            const trafficData = await loadGeoJSON(trafficGeojsonFiles[year]);
+
+            if (map.getLayer('traffic-symbols')) map.removeLayer('traffic-symbols');
+            if (map.getSource('traffic-points')) map.removeSource('traffic-points');
+
+            map.addSource('traffic-points', {
+                type: 'geojson',
+                data: trafficData
+            });
+
+            map.addLayer({
+                id: 'traffic-symbols',
+                type: 'heatmap',
+                source: 'traffic-points',
+                paint: {
+                    'heatmap-weight': [
+                        'interpolate',
+                        ['linear'],
+                        ['to-number', ['get', `AADT_${year}`]], // Ensure AADT is read as an integer
+                        1, 0,
+                        5000, 0.2, 
+                        10000, 0.4, 
+                        20000, 0.6,
+                        50000, 0.8,
+                        100000, 1
+                    ],
+                    'heatmap-intensity': [
+                        'interpolate',
+                        ['linear'],
+                        ['zoom'],
+                        11, 1,
+                        15, 3
+                    ],
+                    // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
+                    // Begin color ramp at 0-stop with a 0-transparency color
+                    // to create a blur-like effect.
+                    'heatmap-color': [
+                        'interpolate',
+                        ['linear'],
+                        ['heatmap-density'],
+                        0, 'rgba(8,81,156,0)',
+                        0.2, 'rgb(8,81,156)',
+                        0.4, 'rgb(49,130,189)',
+                        0.6, 'rgb(107,174,214)',
+                        0.8, 'rgb(189,215,231)',
+                        1, 'rgb(239,243,255)'
+                    ],
+                    // Adjust the heatmap radius by zoom level
+                    'heatmap-radius': [
+                        'interpolate',
+                        ['linear'],
+                        ['zoom'],
+                        10, 11,
+                        18, 25
+                    ],
+                }
+            });
+        };
+
         const updateMap = async (year) => {
             const collisionData = await loadGeoJSON(collisionGeojsonFiles[year]);
 
-            if (map.getLayer('collision-cluster')) map.removeLayer('collision-cluster');
-            if (map.getLayer('collision-count')) map.removeLayer('collision-count');
-            if (map.getLayer('collision-points')) map.removeLayer('collision-points');
+            if (map.getLayer('collision-heatmap')) map.removeLayer('collision-heatmap');
             if (map.getSource('collision-points')) map.removeSource('collision-points');
 
             map.addSource('collision-points', {
                 type: 'geojson',
-                data: collisionData,
-                cluster: true,
-                clusterMaxZoom: 14,
-                clusterRadius: 50
+                data: collisionData
             });
 
-            // Clustering layer
+            // Heatmap layer
             map.addLayer({
-                id: 'collision-cluster',
-                type: 'circle',
+                id: 'collision-heatmap',
+                type: 'heatmap',
                 source: 'collision-points',
-                filter: ['has', 'point_count'],
-                paint: {
-                    'circle-color': [
-                        'step',
-                        ['get', 'point_count'],
-                        '#51bbd6', 100,
-                        '#f1f075', 1000,
-                        '#f28cb1'
-                    ],
-                    'circle-radius': [
-                        'step',
-                        ['get', 'point_count'],
-                        15, 10,
-                        20, 30,
-                        25
-                    ]
-                }
-            });
-
-            // Cluster count labels
-            map.addLayer({
-                id: 'collision-count',
-                type: 'symbol',
-                source: 'collision-points',
-                filter: ['has', 'point_count'],
                 layout: {
-                    'text-field': '{point_count_abbreviated}',
-                    'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                    'text-size': 12
+                    'visibility': 'none' // Hide by default
                 },
                 paint: {
-                    'text-color': '#000'
-                }
-            });
-
-            // Individual collision points
-            map.addLayer({
-                id: 'collision-points',
-                type: 'circle',
-                source: 'collision-points',
-                filter: ['!', ['has', 'point_count']],
-                paint: {
-                    'circle-radius': 5,
-                    'circle-color': '#0000FF'
+                    // Increase the heatmap weight based on crash count
+                    'heatmap-weight': [
+                        'interpolate',
+                        ['linear'],
+                        ['get', 'crash_count'],
+                        0, 0,
+                        10, 1
+                    ],
+                    // Increase the heatmap color weight weight by zoom level
+                    // heatmap-intensity is a multiplier on top of heatmap-weight
+                    'heatmap-intensity': [
+                        'interpolate',
+                        ['linear'],
+                        ['zoom'],
+                        11, 1,
+                        15, 3
+                    ],
+                    // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
+                    // Begin color ramp at 0-stop with a 0-transparency color
+                    // to create a blur-like effect.
+                    'heatmap-color': [
+                        'interpolate',
+                        ['linear'],
+                        ['heatmap-density'],
+                        0, 'rgba(33,102,172,0)',
+                        0.2, 'rgb(254,240,217)',
+                        0.4, 'rgb(253,204,138)',
+                        0.6, 'rgb(252,141,89)',
+                        0.8, 'rgb(227,74,51)',
+                        1, 'rgb(179,0,0)'
+                    ],
+                    // Adjust the heatmap radius by zoom level
+                    'heatmap-radius': [
+                        'interpolate',
+                        ['linear'],
+                        ['zoom'],
+                        10, 11,
+                        18, 25
+                    ],
+                    // Set the heatmap opacity
+                    'heatmap-opacity': 0.5
                 }
             });
         };
@@ -115,6 +180,13 @@
             const year = event.target.value;
             document.getElementById('active-year').textContent = year;
             updateMap(year);
+            updateTrafficLayer(year);
+        });
+
+        document.getElementById('toggleCrashLayer').addEventListener('change', (event) => {
+            const visibility = event.target.checked ? 'visible' : 'none';
+            map.setLayoutProperty('collision-heatmap', 'visibility', visibility);
         });
 
         updateMap(2020);
+        updateTrafficLayer(2020);
