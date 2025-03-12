@@ -68,7 +68,7 @@ const updateTrafficLayer = async (year) => {
             'heatmap-weight': [
                 'interpolate',
                 ['linear'],
-                ['to-number', ['get', `STUDY_ADT`]], // Ensure STUDY_ADT is read as an integer
+                ['get', `STUDY_ADT`], // Ensure STUDY_ADT is read as an integer
                 1, 0,
                 5000, 0.2, 
                 10000, 0.4, 
@@ -126,7 +126,7 @@ const updateTrafficLayer = async (year) => {
             'circle-color': [
                 'interpolate',
                 ['linear'],
-                ['to-number', ['get', `STUDY_ADT`]],
+                ['get', `STUDY_ADT`],
                 1, 'rgba(8,81,156,0)',
                 5000, 'rgb(8,81,156)',
                 10000, 'rgb(49,130,189)',
