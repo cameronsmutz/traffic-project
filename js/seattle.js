@@ -87,9 +87,9 @@ map.on('load', async () => {
                   ['linear'],
                   ['heatmap-density'],
                   0,
-                  'rgba(0,255,0,0)',       // Low
+                  'rgba(255, 255, 255)',       // Low
                   0.2,
-                  'rgb(0,255,0)',          // Low
+                  'rgb(255, 255, 255)',          // Low
                   0.4,
                   'rgb(255,255,0)',        // Moderate
                   0.6,
