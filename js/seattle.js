@@ -129,32 +129,34 @@ map.on('load', async () => {
           clusterRadius: 50 
       });
 
-      map.addLayer({
-          id: 'collision-clusters',
-          type: 'circle',
-          source: 'collision-points',
-          filter: ['has', 'point_count'],
-          paint: {
-              'circle-color': [
-                  'step',
-                  ['get', 'point_count'],
-                  '#51bbd6',
-                  10,
-                  '#f1f075',
-                  30,
-                  '#f28cb1'
-              ],
-              'circle-radius': [
-                  'step',
-                  ['get', 'point_count'],
-                  10,
-                  5,
-                  15,
-                  25,
-                  20
-              ]
-          }
-      });
+    map.addLayer({
+        id: 'collision-clusters',
+        type: 'circle',
+        source: 'collision-points',
+        filter: ['has', 'point_count'],
+        paint: {
+            'circle-color': [
+                'step',
+                ['get', 'point_count'],
+                '#51bbd6',
+                10,
+                '#f1f075',
+                30,
+                '#f28cb1'
+            ],
+            'circle-radius': [
+                'step',
+                ['get', 'point_count'],
+                10,
+                5,
+                15,
+                25,
+                20
+            ],
+            'circle-opacity': 0.6  
+        }
+    });
+
 
       map.addLayer({
           id: 'collision-cluster-count',
