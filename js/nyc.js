@@ -255,7 +255,8 @@ const updateChart = async (year) => {
         totalTraffic += parseInt(feature.properties[`AADT_${year}`]) || 0;
     });
 
-    const averageTraffic = Math.round(totalTraffic / trafficData.features.length);
+    // Calculate the average traffic
+    const averageTraffic = trafficData.features.length ? Math.round(totalTraffic / trafficData.features.length) : 0;
 
     collisionData.features.forEach(feature => {
         totalInjuries += parseInt(feature.properties.number_of_persons_injured) || 0;
