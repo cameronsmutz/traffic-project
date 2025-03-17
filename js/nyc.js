@@ -246,7 +246,7 @@ const updateChart = async (year) => {
 const trafficData = await loadGeoJSON(trafficGeojsonFiles[year]);
 const collisionData = await loadGeoJSON(collisionGeojsonFiles[year]);
 
-// Calculate total traffic, injuries, and deaths
+// Calculate average daily traffic, total injuries, and total deaths
 let totalTraffic = 0;
 let totalInjuries = 0;
 let totalDeaths = 0;
@@ -254,6 +254,8 @@ let totalDeaths = 0;
 trafficData.features.forEach(feature => {
     totalTraffic += parseInt(feature.properties[`AADT_${year}`]) || 0;
 });
+
+const averageTraffic = totalTraffic / trafficData.features.length;
 
 collisionData.features.forEach(feature => {
     totalInjuries += parseInt(feature.properties.number_of_persons_injured) || 0;
@@ -265,7 +267,7 @@ const chart = c3.generate({
     bindto: '#chart',
     data: {
         columns: [
-            ['Average Traffic', totalTraffic],
+            ['Average Traffic', averageTraffic],
             ['Injuries', totalInjuries],
             ['Deaths', totalDeaths]
         ],
