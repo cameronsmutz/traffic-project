@@ -243,51 +243,51 @@ map.addLayer({
 };
 
 const updateChart = async (year) => {
-const trafficData = await loadGeoJSON(trafficGeojsonFiles[year]);
-const collisionData = await loadGeoJSON(collisionGeojsonFiles[year]);
+    const trafficData = await loadGeoJSON(trafficGeojsonFiles[year]);
+    const collisionData = await loadGeoJSON(collisionGeojsonFiles[year]);
 
-// Calculate average daily traffic, total injuries, and total deaths
-let totalTraffic = 0;
-let totalInjuries = 0;
-let totalDeaths = 0;
+    // Calculate average daily traffic, total injuries, and total deaths
+    let totalTraffic = 0;
+    let totalInjuries = 0;
+    let totalDeaths = 0;
 
-trafficData.features.forEach(feature => {
-    totalTraffic += parseInt(feature.properties[`AADT_${year}`]) || 0;
-});
+    trafficData.features.forEach(feature => {
+        totalTraffic += parseInt(feature.properties[`AADT_${year}`]) || 0;
+    });
 
-const averageTraffic = totalTraffic / trafficData.features.length;
+    const averageTraffic = Math.round(totalTraffic / trafficData.features.length);
 
-collisionData.features.forEach(feature => {
-    totalInjuries += parseInt(feature.properties.number_of_persons_injured) || 0;
-    totalDeaths += parseInt(feature.properties.number_of_persons_killed) || 0;
-});
+    collisionData.features.forEach(feature => {
+        totalInjuries += parseInt(feature.properties.number_of_persons_injured) || 0;
+        totalDeaths += parseInt(feature.properties.number_of_persons_killed) || 0;
+    });
 
-// Generate the chart using C3.js
-const chart = c3.generate({
-    bindto: '#chart',
-    data: {
-        columns: [
-            ['Average Traffic', averageTraffic],
-            ['Injuries', totalInjuries],
-            ['Deaths', totalDeaths]
-        ],
-        type: 'bar'
-    },
-    bar: {
-        width: {
-            ratio: 0.5
+    // Generate the chart using C3.js
+    const chart = c3.generate({
+        bindto: '#chart',
+        data: {
+            columns: [
+                ['Average Traffic', averageTraffic],
+                ['Injuries', totalInjuries],
+                ['Deaths', totalDeaths]
+            ],
+            type: 'bar'
+        },
+        bar: {
+            width: {
+                ratio: 0.5
+            }
+        },
+        axis: {
+            x: {
+                type: 'category',
+                categories: ['Metrics']
+            }
+        },
+        color: {
+            pattern: ['#1f77b4', '#ff7f0e', '#d62728']
         }
-    },
-    axis: {
-        x: {
-            type: 'category',
-            categories: ['Metrics']
-        }
-    },
-    color: {
-        pattern: ['#1f77b4', '#ff7f0e', '#d62728']
-    }
-});
+    });
 };
 
 document.getElementById('yearSlider').addEventListener('input', (event) => {
