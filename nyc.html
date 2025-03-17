@@ -80,6 +80,7 @@
             padding: 15px 20px;
             border-radius: 8px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            width: 300px; /* Extend the width to fit the chart */
         }
 
         #legend {
@@ -93,6 +94,7 @@
             height: 12px;
             margin-right: 5px;
             border-radius: 50%;
+            border: 1px solid black;
         }
 
         .blue-dot {
@@ -100,11 +102,10 @@
         }
 
         #chart {
-            position: absolute;
-            top: 350px;
-            left: 30px;
-            width: 300px;
+            margin-top: 15px; /* Add some margin above the chart */
+            width: 100%; /* Ensure the chart takes the full width of the container */
         }
+
     </style>
 </head>
 <body>
@@ -134,8 +135,8 @@
             <p><span class="legend-key" style="background: rgb(189,215,231);"></span>50,000</p>
             <p><span class="legend-key" style="background: rgb(239,243,255);"></span>100,000+</p>
         </div>
+        <div id="chart"></div>
     </div>
-    <div id="chart"></div>
     <script src="js/nyc.js"></script>
 </body>
 </html>
