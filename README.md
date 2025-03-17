@@ -1,7 +1,7 @@
 # Seattle & NYC Traffic Project
 Geog 328 Traffic project
 
-**Website Link:** https://cameronsmutz.github.io/traffic-project/index.html
+**Website Link:** https://cameronsmutz.github.io/traffic-project/intro.html
 
 **Project:** Tracking Seattle versus NY Traffic Flow
 
