@@ -15,6 +15,8 @@ Geog 328 Traffic project
 
 **Functions:** To begin, our map could implement cluster analysis to determine areas with higher or lower traffic congestion. Our project will also use heatmaps to display the different density of traffic in areas. This could be used in partnership with the cluster analysis and would show commuters which areas to avoid when travelling. We can add an additional optional layer that you can toggle on and off that will overlay a heatmap of reported traffic collisions. Moreover, our final project will use a time slider in order to show how traffic and collisions have changed in these two major cities over time. This will be interesting as it will allow the audience to see if any specific areas have improved or worsened dramatically. Furthermore, we could implement shortest path analysis to determine the fastest routes from location A to location B based on traffic conditions. 
 
+---
+
 **Datasets:**
 
 NY Traffic Flow Dataset: https://www.nyc.gov/site/nypd/stats/traffic-data/traffic-data-collision.pageLinks to an external site.
@@ -24,6 +26,8 @@ Seattle Traffic Flow Dataset: https://data-seattlecitygis.opendata.arcgis.com/da
 NYC Crash Mapper Websiite: https://crashmapper.org/#/
 
 SDOT collision data: https://data-seattlecitygis.opendata.arcgis.com/datasets/SeattleCityGIS::sdot-collisions-all-years/about
+
+---
 
 The two datasets above contain traffic flow data for the two metropolitan cities. The dataset for New York City contains data from 2016 - 2023. On the other hand, the data for the city of Seattle contains data from the years 2020 - 2025. These datasets will be used to make our heatmaps showcasing collision rates in the two cities. Additionally, the multitude of different years will allow us to showcase how traffic collisions have either increased or decreased or decreased over the years. Lastly, both datasets include specific coordinates of the collisions. In our project we will be able to highlight specific areas of the two cities that are prone to a high number of collisions. 
 
