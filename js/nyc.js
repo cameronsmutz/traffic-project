@@ -281,21 +281,24 @@ const chart = c3.generate({
             type: 'category',
             categories: ['Metrics']
         }
+    },
+    color: {
+        pattern: ['#1f77b4', '#ff7f0e', '#d62728']
     }
 });
 };
 
 document.getElementById('yearSlider').addEventListener('input', (event) => {
-        const year = event.target.value;
-        document.getElementById('active-year').textContent = year;
-        updateMap(year);
-        updateTrafficLayer(year);
-        updateChart(year);
+const year = event.target.value;
+document.getElementById('active-year').textContent = year;
+updateMap(year);
+updateTrafficLayer(year);
+updateChart(year);
 });
 
 document.getElementById('toggleCrashLayer').addEventListener('change', (event) => {
-        const visibility = event.target.checked ? 'visible' : 'none';
-        map.setLayoutProperty('collision-heatmap', 'visibility', visibility);
+const visibility = event.target.checked ? 'visible' : 'none';
+map.setLayoutProperty('collision-heatmap', 'visibility', visibility);
 });
 
 updateMap(2020);
