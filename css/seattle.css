@@ -1,4 +1,4 @@
-.topnav {
+        .topnav {
           background-color: rgb(0, 0, 0);
           overflow: hidden;
         }
@@ -65,6 +65,7 @@
             padding: 15px 20px;
             border-radius: 8px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            width: 300px; /* Extend the width to fit the chart */
         }
 
         #legend {
@@ -84,7 +85,7 @@
         .blue-dot {
             background: #0000FF;
         }
-          
+
         #chart {
             margin-top: 15px; /* Add some margin above the chart */
             width: 100%; /* Ensure the chart takes the full width of the container */
