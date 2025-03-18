@@ -3,7 +3,7 @@ Geog 328 Traffic project
 
 **Website Link:** https://cameronsmutz.github.io/traffic-project/intro.html
 
-**Project:** Tracking Seattle versus NY Traffic Flow
+**Project:** Tracking Seattle versus NYC Traffic Flow
 
 **Team Members:** Andrew Hoch, Cameron Smutz, Edward Park, Leo Shim, Peter Pham (BA8) 
 
