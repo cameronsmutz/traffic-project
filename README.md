@@ -21,7 +21,7 @@ Geog 328 Traffic project
 
 ---
 
-## Utilized Libraries: 
+**Utilized Libraries:** 
 Mapbox-gl.js  
 Github and Github Pages for filesharing and hosting  
 Custom Mapbox basemap created by Edward Park
@@ -43,3 +43,8 @@ SDOT collision data: https://data-seattlecitygis.opendata.arcgis.com/datasets/Se
 The two datasets above contain traffic flow data for the two metropolitan cities. The dataset for New York City contains data from 2016 - 2023. On the other hand, the data for the city of Seattle contains data from the years 2020 - 2025. These datasets will be used to make our heatmaps showcasing collision rates in the two cities. Additionally, the multitude of different years will allow us to showcase how traffic collisions have either increased or decreased or decreased over the years. Lastly, both datasets include specific coordinates of the collisions. In our project we will be able to highlight specific areas of the two cities that are prone to a high number of collisions. 
 
 To clean our above datasets we first started by filtering the data down to our specific years of inquiry. For the Seattle dataset we specifically optimized the point data by filtering down the coordinates from 17 digits to 5 digits. We also removed unnecessary features such as the “title” and “id” fields. For the Seattle dataset we also created a new geojson file for each of the different individual years allowing us to look at one year at a time. 
+
+---
+
+## AI Use Disclosure:
+Github Copilot was used to assist debugging
