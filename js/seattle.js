@@ -50,13 +50,28 @@ const loadGeoJSON = async (file) => {
 const updateTrafficLayer = async (year) => {
     const trafficData = await loadGeoJSON(trafficGeojsonFiles[year]);
 
+    // Filter out duplicate traffic count points on the same coordinate
+    const uniqueTrafficData = {
+        type: 'FeatureCollection',
+        features: []
+    };
+    const seenCoordinates = new Set();
+
+    trafficData.features.forEach(feature => {
+        const coordinates = feature.geometry.coordinates.join(',');
+        if (!seenCoordinates.has(coordinates)) {
+            seenCoordinates.add(coordinates);
+            uniqueTrafficData.features.push(feature);
+        }
+    });
+
     if (map.getLayer('traffic-symbols')) map.removeLayer('traffic-symbols');
     if (map.getLayer('traffic-point')) map.removeLayer('traffic-point');
     if (map.getSource('traffic-points')) map.removeSource('traffic-points');
 
     map.addSource('traffic-points', {
         type: 'geojson',
-        data: trafficData
+        data: uniqueTrafficData
     });
 
     map.addLayer({
