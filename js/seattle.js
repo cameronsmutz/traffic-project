@@ -36,10 +36,10 @@ const trafficGeojsonFiles = {
 };
 
 const collisionGeojsonFiles = {
-    2020: 'assets/Seattle_Collisions_2020_optimized.geojson',
-    2021: 'assets/Seattle_Collisions_2021_optimized.geojson',
-    2022: 'assets/Seattle_Collisions_2022_optimized.geojson',
-    2023: 'assets/Seattle_Collisions_2023_optimized.geojson',
+    2020: 'assets/SDOT_Collisions_2020_Optimized.geojson',
+    2021: 'assets/SDOT_Collisions_2021_Optimized.geojson',
+    2022: 'assets/SDOT_Collisions_2022_Optimized.geojson',
+    2023: 'assets/SDOT_Collisions_2023_Optimized.geojson',
 };
 
 const loadGeoJSON = async (file) => {
