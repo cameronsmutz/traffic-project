@@ -8,7 +8,7 @@ Geog 328 Traffic project
 **Team Members:** Andrew Hoch, Cameron Smutz, Edward Park, Leo Shim, Peter Pham (BA8) 
 
 **Traffic Project Favicon:**
- ![Traffic Project Favicon](assets/Traffic_Project_Favicon.png)
+<img src="path/to/favicon.png" alt="Favicon" width="32" height="32">  
 
 **Goal:** This project aims to create an interactive web-based GIS application that both visualizes and compares traffic flow patterns in the major United States metropolitan cities of Seattle, Washington and New York City, New York. This project also intends to show how traffic flows have changed over time within the specific city of study. This application will allow the audience to analyze traffic congestion, urban mobility, and their patterns over time. We would also like to see the spatial relationship between them collisions and traffic flows.
 
