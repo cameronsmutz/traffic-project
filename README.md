@@ -23,7 +23,7 @@ Geog 328 Traffic project
 
 ---
 
-**Utilized Libraries:** 
+**Utilized Libraries:** <br>
 Mapbox-gl.js  
 Github and Github Pages for filesharing and hosting  
 Custom Mapbox basemap created by Edward Park
