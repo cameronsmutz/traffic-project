@@ -22,7 +22,7 @@ Geog 328 Traffic project
 
 ## Datasets:
 
-NY Traffic Flow Dataset: https://www.nyc.gov/site/nypd/stats/traffic-data/traffic-data-collision.pageLinks to an external site.
+NY Traffic Flow Dataset: [https://www.nyc.gov/site/nypd/stats/traffic-data/traffic-data-collision.pageLinks to an external site.](https://nysdottrafficdata.drakewell.com/publicmultinodemap.asp)
 
 Seattle Traffic Flow Dataset: https://data-seattlecitygis.opendata.arcgis.com/datasets/SeattleCityGIS::sdot-collisions-all-years/aboutLinks to an external site.
 
