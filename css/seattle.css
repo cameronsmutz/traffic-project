@@ -84,3 +84,8 @@
         .blue-dot {
             background: #0000FF;
         }
+          
+        #chart {
+            margin-top: 15px; /* Add some margin above the chart */
+            width: 100%; /* Ensure the chart takes the full width of the container */
+        }
