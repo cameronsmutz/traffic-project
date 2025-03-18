@@ -19,7 +19,6 @@ Geog 328 Traffic project
 
 ## Utilized Libraries:
 
-...
 mapbox-gl.js
 ---
 
