@@ -28,19 +28,19 @@ const map = new mapboxgl.Map({
     zoom: 10.5
 });
 
-  const trafficGeojsonFiles = {
-      2020: 'assets/seattle_traffic_2020.geojson',
-      2021: 'assets/seattle_traffic_2021.geojson',
-      2022: 'assets/seattle_traffic_2022.geojson',
-      2023: 'assets/seattle_traffic_2023.geojson',
-  };
+const trafficGeojsonFiles = {
+    2020: 'assets/seattle_traffic_2020.geojson',
+    2021: 'assets/seattle_traffic_2021.geojson',
+    2022: 'assets/seattle_traffic_2022.geojson',
+    2023: 'assets/seattle_traffic_2023.geojson',
+};
 
-  const collisionGeojsonFiles = {
-      2020: 'assets/Seattle_Collisions_2020_optimized.geojson',
-      2021: 'assets/Seattle_Collisions_2021_optimized.geojson',
-      2022: 'assets/Seattle_Collisions_2022_optimized.geojson',
-      2023: 'assets/Seattle_Collisions_2023_optimized.geojson',
-  };
+const collisionGeojsonFiles = {
+    2020: 'assets/Seattle_Collisions_2020_optimized.geojson',
+    2021: 'assets/Seattle_Collisions_2021_optimized.geojson',
+    2022: 'assets/Seattle_Collisions_2022_optimized.geojson',
+    2023: 'assets/Seattle_Collisions_2023_optimized.geojson',
+};
 
 const loadGeoJSON = async (file) => {
     const response = await fetch(file + "?t=" + new Date().getTime());
@@ -217,6 +217,21 @@ const updateMap = async (year) => {
             'heatmap-opacity': 0.5
         }
     });
+
+    map.on('click', 'collision-heatmap', (event) => {
+        const properties = event.features[0].properties;
+        const totalInjuries = (parseInt(properties.INJURIES) || 0) + (parseInt(properties.SERIOUSINJURIES) || 0);
+        const totalDeaths = parseInt(properties.FATALITIES) || 0;
+        new mapboxgl.Popup()
+            .setLngLat(event.features[0].geometry.coordinates)
+            .setHTML(`
+                <strong>Location:</strong> ${properties.LOCATION}<br>
+                <strong>Collisions:</strong> ${properties.VEHCOUNT}<br>
+                <strong>Injuries:</strong> ${totalInjuries}<br>
+                <strong>Deaths:</strong> ${totalDeaths}
+            `)
+            .addTo(map);
+    });
 };
 
 document.getElementById('yearSlider').addEventListener('input', (event) => {
@@ -233,4 +248,3 @@ document.getElementById('toggleCrashLayer').addEventListener('change', (event) =
 
 updateMap(2020);
 updateTrafficLayer(2020);
-
