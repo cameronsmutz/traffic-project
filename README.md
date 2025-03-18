@@ -21,7 +21,11 @@ Geog 328 Traffic project
 
 ---
 
-## Utilized Libraries: mapbox-gl.js
+## Utilized Libraries: 
+Mapbox-gl.js  
+Github and Github Pages for filesharing and hosting  
+Custom Mapbox basemap created by Edward Park
+
 ---
 
 ## Datasets:
