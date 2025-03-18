@@ -9,7 +9,7 @@ Geog 328 Traffic project
 
  
 
-**Proposal:** This project aims to create an interactive web-based GIS application that both visualizes and compares traffic flow patterns in the major United States metropolitan cities of Seattle, Washington and New York City, New York. This project also intends to show how traffic flows have changed over time within the specific city of study. This application will allow the audience to analyze traffic congestion, urban mobility, and their patterns over time. We may also be able to add an optional layer that shows a heatmap of reported traffic collisions in order to see the relationship between them and the traffic flows.
+**Goal:** This project aims to create an interactive web-based GIS application that both visualizes and compares traffic flow patterns in the major United States metropolitan cities of Seattle, Washington and New York City, New York. This project also intends to show how traffic flows have changed over time within the specific city of study. This application will allow the audience to analyze traffic congestion, urban mobility, and their patterns over time. We would also like to see the spatial relationship between them collisions and traffic flows.
 
 **Target Audience:**  One group that our map project could be targeted towards is city planners and transportation agencies. Agencies like the Seattle Department of Transportation could use this project for infrastructure improvements, as well as policy planning. Additionally, individuals and residents who commute to work could use this project to optimize their daily transportation routes. Another target group would be delivery companies like FedEx, Amazon, and USPS who are looking to plan efficiency routes and reduce delays in deliveries. Our map could also be used by researchers and academics who are studying transportation systems, both public or private, and their impact on urban planning, the environment and overall urban systems. 
 
@@ -46,5 +46,5 @@ To clean our above datasets we first started by filtering the data down to our s
 
 ---
 
-## AI Use Disclosure:
+**AI Use Disclosure:**
 Github Copilot was used to assist debugging
