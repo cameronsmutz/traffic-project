@@ -226,11 +226,53 @@ const updateMap = async (year) => {
             .setLngLat(event.features[0].geometry.coordinates)
             .setHTML(`
                 <strong>Location:</strong> ${properties.LOCATION}<br>
-                <strong>Collisions:</strong> ${properties.VEHCOUNT}<br>
+                <strong>Number of collisions:</strong> ${properties.VEHCOUNT}<br>
                 <strong>Injuries:</strong> ${totalInjuries}<br>
                 <strong>Deaths:</strong> ${totalDeaths}
             `)
             .addTo(map);
+    });
+};
+
+const updateChart = async (year) => {
+    const collisionData = await loadGeoJSON(collisionGeojsonFiles[year]);
+
+    // Calculate total injuries, total deaths, and total collisions
+    let totalInjuries = 0;
+    let totalDeaths = 0;
+    let totalCollisions = 0;
+
+    collisionData.features.forEach(feature => {
+        totalInjuries += (parseInt(feature.properties.INJURIES) || 0) + (parseInt(feature.properties.SERIOUSINJURIES) || 0);
+        totalDeaths += parseInt(feature.properties.FATALITIES) || 0;
+        totalCollisions += 1; // Increment by 1 for each collision
+    });
+
+    // Generate the chart using C3.js
+    const chart = c3.generate({
+        bindto: '#chart',
+        data: {
+            columns: [
+                ['Total Collisions', totalCollisions],
+                ['Injuries', totalInjuries],
+                ['Deaths', totalDeaths]
+            ],
+            type: 'bar'
+        },
+        bar: {
+            width: {
+                ratio: 0.5
+            }
+        },
+        axis: {
+            x: {
+                type: 'category',
+                categories: ['Metrics']
+            }
+        },
+        color: {
+            pattern: ['#1f77b4', '#ff7f0e', '#d62728']
+        }
     });
 };
 
@@ -239,6 +281,7 @@ document.getElementById('yearSlider').addEventListener('input', (event) => {
     document.getElementById('active-year').textContent = year;
     updateMap(year);
     updateTrafficLayer(year);
+    updateChart(year);
 });
 
 document.getElementById('toggleCrashLayer').addEventListener('change', (event) => {
@@ -248,3 +291,4 @@ document.getElementById('toggleCrashLayer').addEventListener('change', (event) =
 
 updateMap(2020);
 updateTrafficLayer(2020);
+updateChart(2020);
